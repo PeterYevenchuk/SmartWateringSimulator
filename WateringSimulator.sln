@@ -3,9 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34511.84
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WateringSimulator", "WateringSimulator\WateringSimulator.csproj", "{69848076-E084-4F10-9B1F-9D4CBB7237C5}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartWateringSimulator.View", "SmartWateringSimulator.View\SmartWateringSimulator.View.csproj", "{2B698400-2443-4D88-B898-8C6C438A1D37}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WateringSimulatorMvc", "WateringSimulatorMvc\WateringSimulatorMvc.csproj", "{40E54152-3239-4671-AA6C-1EC2C4D4D6EB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,14 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{69848076-E084-4F10-9B1F-9D4CBB7237C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{69848076-E084-4F10-9B1F-9D4CBB7237C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{69848076-E084-4F10-9B1F-9D4CBB7237C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{69848076-E084-4F10-9B1F-9D4CBB7237C5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2B698400-2443-4D88-B898-8C6C438A1D37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2B698400-2443-4D88-B898-8C6C438A1D37}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2B698400-2443-4D88-B898-8C6C438A1D37}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2B698400-2443-4D88-B898-8C6C438A1D37}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40E54152-3239-4671-AA6C-1EC2C4D4D6EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40E54152-3239-4671-AA6C-1EC2C4D4D6EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40E54152-3239-4671-AA6C-1EC2C4D4D6EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40E54152-3239-4671-AA6C-1EC2C4D4D6EB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

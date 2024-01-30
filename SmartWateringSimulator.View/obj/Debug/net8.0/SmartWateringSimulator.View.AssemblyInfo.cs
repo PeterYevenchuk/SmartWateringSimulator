@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SmartWateringSimulator.View")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4b80aded1d1f8e3706383fc942cb2948a724ec9f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0b66266ed6ae800bc45bc30f3df66d4eedb37fbf")]
 [assembly: System.Reflection.AssemblyProductAttribute("SmartWateringSimulator.View")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SmartWateringSimulator.View")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
