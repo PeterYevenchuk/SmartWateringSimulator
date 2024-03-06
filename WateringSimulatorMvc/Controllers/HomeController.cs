@@ -1,32 +1,20 @@
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
-using WateringSimulatorMvc.Models;
+using WateringSimulatorMvc.Services;
 
 namespace WateringSimulatorMvc.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly SoilMoistureService _getSoilMoistureService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(SoilMoistureService getSoilMoistureService)
         {
-            _logger = logger;
+            _getSoilMoistureService = getSoilMoistureService;
         }
-
-        public IActionResult Index()
+        public ActionResult Index()
         {
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var result = _getSoilMoistureService.Get();
+            return View(result);
         }
     }
 }

@@ -1,3 +1,5 @@
+using WateringSimulatorMvc.Services;
+
 namespace WateringSimulatorMvc
 {
     public class Program
@@ -8,6 +10,8 @@ namespace WateringSimulatorMvc
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddScoped<SoilMoistureService>();
 
             var app = builder.Build();
 

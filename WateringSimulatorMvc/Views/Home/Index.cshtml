@@ -1,8 +1,78 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model WateringSimulatorMvc.Models.WateringViewModel
+
+@{
+    ViewData["Title"] = "Smart Watering";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="page">
+    <div class="humidity-sensor">
+        <h2>Soil moisture sensor data</h2>
+        <p id="humidityData">Humidity: @Model.HumidityData%</p>
+    </div>
+    <div class="sprinkler">
+        <h2>Sprinkler</h2>
+        <p id="sprinklerStatus">Sprinkler status. Turn-On: @Model.SprinklerStatus.ToString().ToLower()</p>
+        <button id="btnTurnOn" onclick="turnOnSprinkler()">On</button>
+        <button id="btnTurnOff" onclick="turnOffSprinkler()">Off</button>
+    </div>
+    <div>
+
+    </div>
+    <button onclick="refreshData()">Refresh data</button>
 </div>
+
+<script>
+    var savedSprinklerStatus = localStorage.getItem('sprinklerStatus');
+    if (savedSprinklerStatus !== null) {
+        updateButtons(JSON.parse(savedSprinklerStatus));
+    }
+
+    function refreshData() {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '/api/SoilMoistureSensor/GetSoilMoisture', true);
+
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                var responseData = JSON.parse(xhr.responseText);
+                updateData(responseData);
+            }
+        };
+
+        xhr.send();
+    }
+
+    function updateData(data) {
+        document.getElementById('humidityData').innerText = 'Humidity: ' + data.humidityData + '%';
+        document.getElementById('sprinklerStatus').innerText = 'Sprinkler status. Turn-On: ' + data.sprinklerStatus;
+
+        updateButtons(data.sprinklerStatus);
+    }
+
+    function turnOnSprinkler() {
+        updateSprinklerStatus(true);
+    }
+
+    function turnOffSprinkler() {
+        updateSprinklerStatus(false);
+    }
+
+    function updateSprinklerStatus(turnOn) {
+        localStorage.setItem('sprinklerStatus', JSON.stringify(turnOn));
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/api/SoilMoistureSensor/set-turn-on-status/' + turnOn, true);
+
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                refreshData();
+            }
+        };
+
+        xhr.send();
+    }
+
+    function updateButtons(turnOn) {
+        document.getElementById('btnTurnOn').disabled = turnOn;
+        document.getElementById('btnTurnOff').disabled = !turnOn;
+    }
+</script>

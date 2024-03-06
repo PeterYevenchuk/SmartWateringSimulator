@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using WateringSimulatorMvc.Models;
+using WateringSimulatorMvc.Services;
 
 namespace WateringSimulatorMvc.Controllers;
 
@@ -6,12 +8,24 @@ namespace WateringSimulatorMvc.Controllers;
 [Route("api/[controller]")]
 public class SoilMoistureSensorController : ControllerBase
 {
-    [HttpGet("GetSoilMoisture")]
-    public ActionResult<double> Get()
+    private readonly SoilMoistureService _getSoilMoistureService;
+
+    public SoilMoistureSensorController(SoilMoistureService getSoilMoistureService)
     {
-        var random = new Random();
-        double soilMoisture = random.NextDouble() * 100;
-        string formattedSoilMoisture = soilMoisture.ToString("0.00");
-        return Ok(formattedSoilMoisture);
+        _getSoilMoistureService = getSoilMoistureService;
+    }
+
+    [HttpGet("GetSoilMoisture")]
+    public ActionResult<WateringViewModel> Get()
+    {
+        var result = _getSoilMoistureService.Get();
+        return Ok(result);
+    }
+
+    [HttpPost("set-turn-on-status/{turnOn}")]
+    public ActionResult<WateringViewModel> SetStatus(bool turnOn)
+    {
+        _getSoilMoistureService.TurnOn(turnOn);
+        return Ok();
     }
 }
