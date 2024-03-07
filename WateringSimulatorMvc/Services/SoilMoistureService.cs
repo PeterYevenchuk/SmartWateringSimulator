@@ -5,6 +5,7 @@ namespace WateringSimulatorMvc.Services;
 public class SoilMoistureService
 {
     private const string StatusFilePath = "wwwroot/SprinklerStatus.txt";
+    private const string LevelFilePath = "wwwroot/SoilMoistureLevel.txt";
 
     public bool Status
     {
@@ -12,23 +13,63 @@ public class SoilMoistureService
         set => SetSprinklerStatusToFile(value);
     }
 
-    public WateringViewModel Get()
+    public double Level
     {
-        var random = new Random();
-        double soilMoisture = random.NextDouble() * 100;
-        string formattedSoilMoisture = soilMoisture.ToString("0.00");
-        double humidityData = Convert.ToDouble(formattedSoilMoisture);
-        var result = new WateringViewModel
-        {
-            HumidityData = humidityData,
-            SprinklerStatus = Status
-        };
-        return result;
+        get => GetSoilMoistureLevelFromFile();
+        set => SetSoilMoistureLevelToFile(value);
     }
 
-    public void TurnOn(bool turnOn)
+    public WateringViewModel Get()
+    {
+        return new WateringViewModel
+        {
+            HumidityData = Level,
+            SprinklerStatus = Status
+        };
+    }
+
+    public async void TurnOn(bool turnOn)
     {
         Status = turnOn;
+
+        if (turnOn)
+        {
+            await SoilMoistureLevelOn();
+        }
+        else
+        {
+            await SoilMoistureLevelOff();
+        }
+    }
+
+    private async Task SoilMoistureLevelOn()
+    {
+        while (Status && Level <= 60)
+        {
+            await Task.Delay(60000);
+            Level++;
+        }
+        Status = false;
+        await SoilMoistureLevelOff();
+    }
+
+    private async Task SoilMoistureLevelOff()
+    {
+        while (!Status && Level >= 1)
+        {
+            await Task.Delay(300000);
+            Level--;
+        }
+    }
+
+    private double GetSoilMoistureLevelFromFile()
+    {
+        if(File.Exists(LevelFilePath))
+        {
+            string levelText = File.ReadAllText(LevelFilePath);
+            return Convert.ToDouble(levelText);
+        }
+        throw new Exception("File SoilMoistureLevel.txt not exist!");
     }
 
     private bool GetSprinklerStatusFromFile()
@@ -38,7 +79,12 @@ public class SoilMoistureService
             string statusText = File.ReadAllText(StatusFilePath);
             return bool.TryParse(statusText, out bool status) ? status : false;
         }
-        return false;
+        throw new Exception("File SprinklerStatus.txt not exist!");
+    }
+
+    private void SetSoilMoistureLevelToFile(double level)
+    {
+        File.WriteAllText(LevelFilePath, level.ToString());
     }
 
     private void SetSprinklerStatusToFile(bool status)
