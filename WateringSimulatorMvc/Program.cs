@@ -12,6 +12,7 @@ namespace WateringSimulatorMvc
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddScoped<SoilMoistureService>();
+            builder.Services.AddHttpClient<SoilMoistureService>();
 
             var app = builder.Build();
 

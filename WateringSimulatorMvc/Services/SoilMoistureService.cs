@@ -1,4 +1,7 @@
-﻿using WateringSimulatorMvc.Models;
+﻿using Newtonsoft.Json;
+using System.Net.Http;
+using System.Text;
+using WateringSimulatorMvc.Models;
 
 namespace WateringSimulatorMvc.Services;
 
@@ -6,6 +9,12 @@ public class SoilMoistureService
 {
     private const string StatusFilePath = "wwwroot/SprinklerStatus.txt";
     private const string LevelFilePath = "wwwroot/SoilMoistureLevel.txt";
+    private readonly HttpClient _httpClient;
+
+    public SoilMoistureService(HttpClient httpClient)
+    {
+        _httpClient = httpClient;
+    }
 
     public bool Status
     {
@@ -34,7 +43,7 @@ public class SoilMoistureService
 
         if (turnOn)
         {
-            await SoilMoistureLevelOn();
+            await SoilMoistureLevelOn(DateTime.Now, Level);
         }
         else
         {
@@ -42,13 +51,20 @@ public class SoilMoistureService
         }
     }
 
-    private async Task SoilMoistureLevelOn()
+    private async Task SoilMoistureLevelOn(DateTime now, double level)
     {
         while (Status && Level <= 60)
         {
-            await Task.Delay(60000);
+            await Task.Delay(2000); //60000
             Level++;
         }
+        await DataInfo(new InfoViewModel
+        {
+            StartDate = now,
+            EndDate = DateTime.Now,
+            StartLevel = level,
+            EndLevel = Level,
+        });
         Status = false;
         await SoilMoistureLevelOff();
     }
@@ -90,5 +106,12 @@ public class SoilMoistureService
     private void SetSprinklerStatusToFile(bool status)
     {
         File.WriteAllText(StatusFilePath, status.ToString());
+    }
+
+    private async Task DataInfo(InfoViewModel model)
+    {
+        var json = JsonConvert.SerializeObject(model);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+        await _httpClient.PostAsync("https://localhost:7265/api/SmartWatering/sensor-information", content);
     }
 }
