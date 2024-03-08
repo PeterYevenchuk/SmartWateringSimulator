@@ -22,10 +22,10 @@ public class SoilMoistureSensorController : ControllerBase
         return Ok(result);
     }
 
-    [HttpPost("set-turn-on-status/{turnOn}")]
-    public ActionResult<WateringViewModel> SetStatus(bool turnOn)
+    [HttpPost("set-turn-on-status/{turnOn}/{userId}")]
+    public ActionResult<WateringViewModel> SetStatus(bool turnOn, int userId)
     {
-        _getSoilMoistureService.TurnOn(turnOn);
+        _getSoilMoistureService.TurnOn(turnOn, userId);
         return Ok();
     }
 }

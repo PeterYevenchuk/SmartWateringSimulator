@@ -12,8 +12,7 @@
     <div class="sprinkler">
         <h2>Sprinkler</h2>
         <p id="sprinklerStatus">Sprinkler status. Turn-On: @Model.SprinklerStatus.ToString().ToLower()</p>
-        <button id="btnTurnOn" onclick="turnOnSprinkler()">On</button>
-        <button id="btnTurnOff" onclick="turnOffSprinkler()">Off</button>
+        
     </div>
     <div>
 
@@ -46,33 +45,5 @@
         document.getElementById('sprinklerStatus').innerText = 'Sprinkler status. Turn-On: ' + data.sprinklerStatus;
 
         updateButtons(data.sprinklerStatus);
-    }
-
-    function turnOnSprinkler() {
-        updateSprinklerStatus(true);
-    }
-
-    function turnOffSprinkler() {
-        updateSprinklerStatus(false);
-    }
-
-    function updateSprinklerStatus(turnOn) {
-        localStorage.setItem('sprinklerStatus', JSON.stringify(turnOn));
-
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', '/api/SoilMoistureSensor/set-turn-on-status/' + turnOn, true);
-
-        xhr.onload = function () {
-            if (xhr.status === 200) {
-                refreshData();
-            }
-        };
-
-        xhr.send();
-    }
-
-    function updateButtons(turnOn) {
-        document.getElementById('btnTurnOn').disabled = turnOn;
-        document.getElementById('btnTurnOff').disabled = !turnOn;
     }
 </script>

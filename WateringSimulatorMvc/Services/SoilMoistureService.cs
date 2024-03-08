@@ -37,13 +37,13 @@ public class SoilMoistureService
         };
     }
 
-    public async void TurnOn(bool turnOn)
+    public async void TurnOn(bool turnOn, int userId)
     {
         Status = turnOn;
 
         if (turnOn)
         {
-            await SoilMoistureLevelOn(DateTime.Now, Level);
+            await SoilMoistureLevelOn(DateTime.Now, Level, userId);
         }
         else
         {
@@ -51,7 +51,7 @@ public class SoilMoistureService
         }
     }
 
-    private async Task SoilMoistureLevelOn(DateTime now, double level)
+    private async Task SoilMoistureLevelOn(DateTime now, double level, int userId)
     {
         while (Status && Level <= 60)
         {
@@ -64,6 +64,7 @@ public class SoilMoistureService
             EndDate = DateTime.Now,
             StartLevel = level,
             EndLevel = Level,
+            UserId = userId
         });
         Status = false;
         await SoilMoistureLevelOff();
@@ -73,7 +74,7 @@ public class SoilMoistureService
     {
         while (!Status && Level >= 1)
         {
-            await Task.Delay(300000);
+            await Task.Delay(10000); //120000
             Level--;
         }
     }
