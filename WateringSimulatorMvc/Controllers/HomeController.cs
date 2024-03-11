@@ -14,7 +14,7 @@ namespace WateringSimulatorMvc.Controllers
         public ActionResult Index()
         {
             var result = _getSoilMoistureService.Get();
-            return View(result);
+            return View();
         }
     }
 }

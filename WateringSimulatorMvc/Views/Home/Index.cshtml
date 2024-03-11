@@ -1,35 +1,61 @@
-﻿@model WateringSimulatorMvc.Models.WateringViewModel
-
-@{
-    ViewData["Title"] = "Smart Watering";
-}
-
-<div class="page">
-    <div class="humidity-sensor">
-        <h2>Soil moisture sensor data</h2>
-        <p id="humidityData">Humidity: @Model.HumidityData%</p>
+﻿<div class="page">
+    <div class="humidity">
+        <h2>Soil moisture</h2>
+        <p id="humidityData"></p>
     </div>
     <div class="sprinkler">
         <h2>Sprinkler</h2>
-        <p id="sprinklerStatus">Sprinkler status. Turn-On: @Model.SprinklerStatus.ToString().ToLower()</p>
-        
+        <p id="sprinklerStatus"></p>
     </div>
-    <div>
+    <button onclick="refreshData()" class="refresh-button">Refresh data</button>
+    <style>
+        .refresh-button {
+            border: 2px solid;
+            padding: 5px;
+            border-radius: 5px;
+            display: flex;
+            margin-top: 5px;
+            margin-left: 115px;
+            cursor: pointer;
+        }
 
-    </div>
-    <button onclick="refreshData()">Refresh data</button>
+        .refresh-button:active {
+            background-color: lightgray;
+        }
+
+        .sprinkler, .humidity {
+            display: inline-block;
+            border: 2px solid;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .humidity-data {
+            background-color: grey;
+            color: #FFFFFF;
+        }
+
+        .sprinkler-on {
+            background-color: #8FEC8F;
+            color: #FFFFFF;
+        }
+
+        .sprinkler-off {
+            background-color: #FF6E6E;
+            color: #FFFFFF;
+        }
+    </style>
 </div>
 
 <script>
-    var savedSprinklerStatus = localStorage.getItem('sprinklerStatus');
-    if (savedSprinklerStatus !== null) {
-        updateButtons(JSON.parse(savedSprinklerStatus));
-    }
+    document.addEventListener("DOMContentLoaded", function () {
+        // Оновлення даних при завантаженні сторінки
+        refreshData();
+    });
 
     function refreshData() {
         var xhr = new XMLHttpRequest();
         xhr.open('GET', '/api/SoilMoistureSensor/GetSoilMoisture', true);
-
         xhr.onload = function () {
             if (xhr.status === 200) {
                 var responseData = JSON.parse(xhr.responseText);
@@ -41,9 +67,19 @@
     }
 
     function updateData(data) {
-        document.getElementById('humidityData').innerText = 'Humidity: ' + data.humidityData + '%';
-        document.getElementById('sprinklerStatus').innerText = 'Sprinkler status. Turn-On: ' + data.sprinklerStatus;
+        var humidityStatusElement = document.getElementById('humidityData');
+        humidityStatusElement.className = 'humidity humidity-data';
+        humidityStatusElement.innerText = 'Humidity: ' + data.humidityData + '%';
 
-        updateButtons(data.sprinklerStatus);
+        var sprinklerStatusElement = document.getElementById('sprinklerStatus');
+        if (data.sprinklerStatus) {
+            sprinklerStatusElement.className = 'sprinkler sprinkler-on';
+            sprinklerStatusElement.innerText = 'Sprinkler status. Turn-On: On';
+        } else {
+            sprinklerStatusElement.className = 'sprinkler sprinkler-off';
+            sprinklerStatusElement.innerText = 'Sprinkler status. Turn-On: Off';
+        }
+
+        localStorage.setItem('sprinklerStatus', JSON.stringify(status));
     }
 </script>
