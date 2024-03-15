@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System.Net.Http;
 using System.Text;
 using WateringSimulatorMvc.Models;
 
@@ -74,7 +73,7 @@ public class SoilMoistureService
     {
         while (!Status && Level >= 1)
         {
-            await Task.Delay(10000); //120000
+            await Task.Delay(5000); //120000
             Level--;
         }
     }
