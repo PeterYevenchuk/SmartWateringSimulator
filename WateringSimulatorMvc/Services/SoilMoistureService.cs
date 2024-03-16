@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Reflection;
 using System.Text;
 using WateringSimulatorMvc.Models;
 
@@ -73,6 +74,10 @@ public class SoilMoistureService
     {
         while (!Status && Level >= 1)
         {
+            if (Level == 25)
+            {
+                await LowLevel(Level);
+            }
             await Task.Delay(5000); //120000
             Level--;
         }
@@ -113,5 +118,10 @@ public class SoilMoistureService
         var json = JsonConvert.SerializeObject(model);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
         await _httpClient.PostAsync("https://localhost:7265/api/SmartWatering/sensor-information", content);
+    }
+
+    private async Task LowLevel(double level)
+    {
+        await _httpClient.PostAsync($"https://localhost:7265/api/SmartWatering/low-level/{level}", null);
     }
 }
