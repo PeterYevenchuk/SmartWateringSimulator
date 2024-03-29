@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System.Reflection;
 using System.Text;
 using WateringSimulatorMvc.Models;
 
@@ -10,6 +9,8 @@ public class SoilMoistureService
     private const string StatusFilePath = "wwwroot/SprinklerStatus.txt";
     private const string LevelFilePath = "wwwroot/SoilMoistureLevel.txt";
     private readonly HttpClient _httpClient;
+
+    public const string NameId = "Sprinkler Test";
 
     public SoilMoistureService(HttpClient httpClient)
     {
@@ -76,9 +77,9 @@ public class SoilMoistureService
         {
             if (Level == 25)
             {
-                await LowLevel(Level);
+                await LowLevel(Level, NameId);
             }
-            await Task.Delay(5000); //120000
+            await Task.Delay(30000); //120000
             Level--;
         }
     }
@@ -120,8 +121,8 @@ public class SoilMoistureService
         await _httpClient.PostAsync("https://localhost:7265/api/SmartWatering/sensor-information", content);
     }
 
-    private async Task LowLevel(double level)
+    private async Task LowLevel(double level, string nameId)
     {
-        await _httpClient.PostAsync($"https://localhost:7265/api/SmartWatering/low-level/{level}", null);
+        await _httpClient.PostAsync($"https://localhost:7265/api/SmartWatering/low-level/{level}/{nameId}", null);
     }
 }
