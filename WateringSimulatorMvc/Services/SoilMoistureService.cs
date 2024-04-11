@@ -65,7 +65,8 @@ public class SoilMoistureService
             EndDate = DateTime.Now,
             StartLevel = level,
             EndLevel = Level,
-            UserId = userId
+            UserId = userId,
+            NameId = NameId
         });
         Status = false;
         await SoilMoistureLevelOff();

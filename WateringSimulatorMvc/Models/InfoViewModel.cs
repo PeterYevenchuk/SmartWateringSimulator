@@ -11,4 +11,6 @@ public class InfoViewModel
     public DateTime EndDate { get; set; }
 
     public int UserId { get; set; }
+
+    public string NameId { get; set; }
 }
